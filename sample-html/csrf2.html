@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+	render("main");
+
+	$("#message-form").submit(function(e){
+		e.preventDefault();
+
+		$.ajax({
+			type:		"POST",
+			url:		"http://localhost:8080/bbs/submit.servlet",
+			data: {
+				"msg": $("#message").val()
+			},
+			dataType:	"html",
+			xhrFields: { withCredentials:true },
+			success: function(html){
+				render("main");
+			}
+		});
+	});
+});
+
+function render(targetId) {
+	$.ajax({
+		type:		"GET",
+		url:		"http://localhost:8080/bbs/",
+		dataType:	"html",
+		xhrFields: { withCredentials:true },
+		success: function(html){
+			var $html = $(html).find("table");
+			$("#message-table").remove();
+			$("#" + targetId).append($html);
+		}
+	});
+}
+</script>
+</head>
+<body>
+	<div id="main" class="container">
+		<div>
+			<form method="post" id="message-form">
+				<input type="hidden" name="_charset_" value="UTF-8">
+				<div class="form-group">
+					<label for="message">Message</label>
+					<input type="text" name="msg" class="form-control" id="message" placeholder="Enter message" autocomplete="off">
+				</div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
