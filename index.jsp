@@ -1,4 +1,9 @@
 <%@ page import="com.gasyou.bbs.db.DB"%>
+<%@ page import="com.gasyou.bbs.util.PostToken"%>
+<%@ page import="com.gasyou.bbs.util.PropertyMap"%>
+<%@ page import="com.gasyou.bbs.util.StringUtils"%>
+<%@ page import="com.gasyou.bbs.servlet.BBSServlet"%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@ page contentType="text/html; charset=UTF-8"%>
@@ -6,8 +11,16 @@
 <c:set var="msgs" value="<%=DB.getInstance().getMessages()%>" />
 
 <%
-	response.addHeader("Access-Control-Allow-Origin", 		"http://localhost");
-	response.addHeader("Access-Control-Allow-Credentials",	"true");
+	// Access Control
+	String origin = request.getHeader("Origin");
+	String[] allowOrigins = PropertyMap.getInstance().getProperty("allow.origins", new String[0]);
+	for (String allowOrigin : allowOrigins) {
+		if (StringUtils.equals(origin, allowOrigin)) {
+			response.setHeader("Access-Control-Allow-Origin", origin);
+			response.setHeader("Access-Control-Allow-Credentials", String.valueOf(true));
+			break;
+		}
+	}
 %>
 
 <!doctype html>
@@ -20,7 +33,8 @@
 <body>
 	<div class="container">
 		<div>
-			<form action="/bbs/submit.servlet" method="post">
+			<form action="<%= BBSServlet.PATH_SUBMIT %>" method="post">
+				<input type="hidden" name="_ct" value="<%= PostToken.getToken(request, BBSServlet.class.getName(), true) %>">
 				<input type="hidden" name="_charset_" value="UTF-8">
 				<div class="form-group">
 					<label for="message">Message</label>

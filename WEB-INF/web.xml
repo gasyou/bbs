@@ -17,9 +17,15 @@
 	      <param-value>init.properties</param-value>
 	    </init-param>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>BBSServlet</servlet-name>
         <url-pattern>/submit.servlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>BBSServlet</servlet-name>
+        <url-pattern>/ajax.servlet</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

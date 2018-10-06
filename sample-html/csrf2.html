@@ -15,6 +15,7 @@ $(document).ready(function(){
 			type:		"POST",
 			url:		"http://localhost:8080/bbs/submit.servlet",
 			data: {
+				"_ct": $("input[name='_ct']").val(),
 				"msg": $("#message").val()
 			},
 			dataType:	"html",
@@ -38,6 +39,17 @@ function render(targetId) {
 			$("#" + targetId).append($html);
 		}
 	});
+
+	$.ajax({
+		type:		"GET",
+		url:		"http://localhost:8080/bbs/ajax.servlet",
+		dataType:	"json",
+		xhrFields: { withCredentials:true },
+		success: function(json){
+			var token = json.token;
+			$("input[name='_ct']").val(token);
+		}
+	});
 }
 </script>
 </head>
@@ -45,6 +57,7 @@ function render(targetId) {
 	<div id="main" class="container">
 		<div>
 			<form method="post" id="message-form">
+				<input type="hidden" name="_ct" value="">
 				<input type="hidden" name="_charset_" value="UTF-8">
 				<div class="form-group">
 					<label for="message">Message</label>
