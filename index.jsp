@@ -33,7 +33,7 @@
 <body>
 	<div class="container">
 		<div>
-			<form action="<%= BBSServlet.PATH_SUBMIT %>" method="post">
+			<form action="/bbs<%= BBSServlet.PATH_SUBMIT %>" method="post">
 				<input type="hidden" name="_ct" value="<%= PostToken.getToken(request, BBSServlet.class.getName(), true) %>">
 				<input type="hidden" name="_charset_" value="UTF-8">
 				<div class="form-group">
